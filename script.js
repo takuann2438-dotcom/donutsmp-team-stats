@@ -1,6 +1,5 @@
 async function loadStats() {
     try {
-        // キャッシュ対策をして取得
         const response = await fetch(`team_stats.json?t=${new Date().getTime()}`);
         const rootData = await response.json();
         
@@ -17,13 +16,13 @@ async function loadStats() {
         let totalKills = 0;
         let totalDeaths = 0;
 
-        // 所持金順にソート
         data.sort((a, b) => (b.money || 0) - (a.money || 0));
 
         data.forEach(player => {
-            const m = player.money || 0;
-            const k = player.kills || 0;
-            const d = player.deaths || 0;
+            // Number() で確実に「数字」として扱う
+            const m = Number(player.money || 0);
+            const k = Number(player.kills || 0);
+            const d = Number(player.deaths || 0);
 
             totalMoney += m;
             totalKills += k;
@@ -38,12 +37,11 @@ async function loadStats() {
             tbody.innerHTML += row;
         });
 
-        // 合計行を追加
         const totalRow = `<tr class="total-row">
             <td>TEAM TOTAL</td>
             <td>${totalMoney.toLocaleString()}</td>
-            <td>${totalKills}</td>
-            <td>${totalDeaths}</td>
+            <td>${totalKills.toLocaleString()}</td>
+            <td>${totalDeaths.toLocaleString()}</td>
         </tr>`;
         tbody.innerHTML += totalRow;
 
@@ -53,5 +51,4 @@ async function loadStats() {
     }
 }
 
-// ページ読み込み完了時に実行
 window.onload = loadStats;
