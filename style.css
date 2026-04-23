@@ -33,3 +33,10 @@ tr:nth-child(even) {
     font-weight: bold; 
     color: #ffcc00;
 }
+button#formatBtn:hover {
+    background: #555;
+    border-color: #ffcc00;
+}
+button#formatBtn:active {
+    background: #333;
+}

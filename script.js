@@ -1,10 +1,33 @@
+// 表示モードの管理 (false: 通常, true: 略称)
+let isShortFormat = false;
+
+// 数値を K や M に変換する関数
+function formatNumber(num) {
+    if (!isShortFormat) return num.toLocaleString();
+
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(2) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+}
+
+// ボタンが押された時の処理
+function toggleFormat() {
+    isShortFormat = !isShortFormat;
+    const btn = document.getElementById('formatBtn');
+    btn.innerText = isShortFormat ? "通常表記に戻す" : "K/M表記に切り替え";
+    loadStats(); // 再描画
+}
+
 async function loadStats() {
     try {
         const response = await fetch(`team_stats.json?t=${new Date().getTime()}`);
         const rootData = await response.json();
         
         const tbody = document.querySelector('#statsTable tbody');
-        if (!tbody) return; // tableが見つからない場合は中断
+        if (!tbody) return;
         tbody.innerHTML = '';
 
         if (rootData.lastUpdated) {
@@ -14,16 +37,13 @@ async function loadStats() {
 
         const players = rootData.players || [];
         
-        // 合計用の変数を「最初から数字の0」でリセット
         let totalMoney = 0;
         let totalKills = 0;
         let totalDeaths = 0;
 
-        // 所持金順にソート
         players.sort((a, b) => Number(b.money || 0) - Number(a.money || 0));
 
         players.forEach(player => {
-            // 文字列を「整数」に強制変換（int型のように扱う）
             const m = parseInt(player.money) || 0;
             const k = parseInt(player.kills) || 0;
             const d = parseInt(player.deaths) || 0;
@@ -35,19 +55,18 @@ async function loadStats() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${player.name || 'Unknown'}</td>
-                <td>${m.toLocaleString()}</td>
+                <td>${formatNumber(m)}</td>
                 <td>${k}</td>
                 <td>${d}</td>
             `;
             tbody.appendChild(row);
         });
 
-        // 合計行の作成
         const totalRow = document.createElement('tr');
-        totalRow.className = 'total-row'; // style.cssで設定したクラス
+        totalRow.className = 'total-row';
         totalRow.innerHTML = `
             <td>TEAM TOTAL</td>
-            <td>${totalMoney.toLocaleString()}</td>
+            <td>${formatNumber(totalMoney)}</td>
             <td>${totalKills.toLocaleString()}</td>
             <td>${totalDeaths.toLocaleString()}</td>
         `;
@@ -59,9 +78,4 @@ async function loadStats() {
     }
 }
 
-// ページ読み込み完了時に確実に実行
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadStats);
-} else {
-    loadStats();
-}
+window.onload = loadStats;
