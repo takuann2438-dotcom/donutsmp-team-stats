@@ -45,7 +45,7 @@
 
             data.forEach(player => {
             // データが欠けていてもエラーにならないように安全策をとる
-                const bal = (player.bal || 0).toLocaleString();
+                const bal = (player.money || 0).toLocaleString();
                 const kills = player.kills || 0;
                 const deaths = player.deaths || 0;
                 const name = player.name || 'Unknown';
