@@ -1,27 +1,26 @@
-// 表示モードの管理 (false: 通常, true: 略称)
+// 表示モードの管理
 let isShortFormat = false;
 
 // 数値を K や M に変換する関数
 function formatNumber(num) {
     if (!isShortFormat) return num.toLocaleString();
-
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(2) + 'M';
-    } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
+    if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num.toString();
 }
 
-// ボタンが押された時の処理
-function toggleFormat() {
+// 【修正ポイント】window.をつけることで、HTMLのonclickから呼べるようにする
+window.toggleFormat = function() {
     isShortFormat = !isShortFormat;
     const btn = document.getElementById('formatBtn');
-    btn.innerText = isShortFormat ? "通常表記に戻す" : "K/M表記に切り替え";
+    if (btn) {
+        btn.innerText = isShortFormat ? "通常表記に戻す" : "K/M表記に切り替え";
+    }
     loadStats(); // 再描画
-}
+};
 
-async function loadStats() {
+// メインの読み込み関数も window に紐付けておく
+window.loadStats = async function() {
     try {
         const response = await fetch(`team_stats.json?t=${new Date().getTime()}`);
         const rootData = await response.json();
@@ -69,13 +68,13 @@ async function loadStats() {
             <td>${formatNumber(totalMoney)}</td>
             <td>${totalKills.toLocaleString()}</td>
             <td>${totalDeaths.toLocaleString()}</td>
-        `;
+        </tr>`;
         tbody.appendChild(totalRow);
 
     } catch (e) {
         console.error("読み込み失敗:", e);
-        document.getElementById('time').innerText = 'データの読み込みに失敗しました。';
     }
-}
+};
 
-window.onload = loadStats;
+// 起動時の実行
+window.onload = window.loadStats;
