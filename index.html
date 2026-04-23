@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DonutSMP Team Stats</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; }
+        table { margin: 20px auto; border-collapse: collapse; width: 80%; max-width: 800px; }
+        th, td { border: 1px solid #444; padding: 12px; text-align: left; }
+        th { background: #333; color: #ffcc00; }
+        tr:nth-child(even) { background: #222; }
+        .update-time { color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>Team Stats Leaderboard</h1>
+    <p id="time" class="update-time"></p>
+    
+    <table id="statsTable">
+        <thead>
+            <tr>
+                <th>プレイヤー名</th>
+                <th>所持金 ($)</th>
+                <th>キル数</th>
+                <th>デス数</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+    <script>
+        async function loadStats() {
+            try {
+                // Actionsが生成したJSONを読み込む
+                const response = await fetch('team_stats.json');
+                const data = await response.json();
+                
+                const tbody = document.querySelector('#statsTable tbody');
+                tbody.innerHTML = '';
+
+                // データを所持金(bal)の多い順に並び替える
+                data.sort((a, b) => b.bal - a.bal);
+
+                data.forEach(player => {
+                    const row = `<tr>
+                        <td>${player.name}</td>
+                        <td>${player.bal.toLocaleString()}</td>
+                        <td>${player.kills}</td>
+                        <td>${player.deaths}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+                document.getElementById('time').innerText = '最終更新: ' + new Date().toLocaleString();
+            } catch (e) {
+                console.error("データの読み込みに失敗しました", e);
+            }
+        }
+        loadStats();
+    </script>
+</body>
+</html>
