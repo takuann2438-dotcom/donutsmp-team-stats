@@ -4,14 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DonutSMP Team Stats</title>
-    <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; }
-        table { margin: 20px auto; border-collapse: collapse; width: 80%; max-width: 800px; }
-        th, td { border: 1px solid #444; padding: 12px; text-align: left; }
-        th { background: #333; color: #ffcc00; }
-        tr:nth-child(even) { background: #222; }
-        .update-time { color: #888; font-size: 0.9em; margin-bottom: 20px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Team Stats Leaderboard</h1>
@@ -26,55 +19,9 @@
                 <th>デス数</th>
             </tr>
         </thead>
-        <tbody>
-            </tbody>
+        <tbody></tbody>
     </table>
 
-    <script>
-        async function loadStats() {
-            try {
-                // Actionsが生成した新構造のJSONを読み込む
-                const response = await fetch('team_stats.json');
-                const rootData = await response.json();
-                
-                // 1. 最終取得時刻の表示
-                if (rootData.lastUpdated) {
-                    const lastUpdated = new Date(rootData.lastUpdated).toLocaleString();
-                    document.getElementById('time').innerText = `データ最終取得時刻: ${lastUpdated}`;
-                }
-
-                // 2. プレイヤー一覧の取得
-                const data = rootData.players || [];
-                const tbody = document.querySelector('#statsTable tbody');
-                tbody.innerHTML = '';
-
-                // 3. money(所持金)の多い順に並び替える
-                data.sort((a, b) => (b.money || 0) - (a.money || 0));
-
-                // 4. 表の作成
-                data.forEach(player => {
-                    const name = player.name || 'Unknown';
-                    const money = (player.money || 0).toLocaleString();
-                    const kills = player.kills || 0;
-                    const deaths = player.deaths || 0;
-
-                    const row = `<tr>
-                        <td>${name}</td>
-                        <td>${money}</td>
-                        <td>${kills}</td>
-                        <td>${deaths}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                });
-
-            } catch (e) {
-                console.error("データの読み込みに失敗しました", e);
-                document.getElementById('time').innerText = 'データの読み込みに失敗しました。';
-            }
-        }
-        
-        // ページ読み込み時に実行
-        loadStats();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

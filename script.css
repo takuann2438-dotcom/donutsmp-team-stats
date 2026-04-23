@@ -1,0 +1,35 @@
+body { 
+    font-family: sans-serif; 
+    background: #1a1a1a; 
+    color: white; 
+    text-align: center; 
+}
+table { 
+    margin: 20px auto; 
+    border-collapse: collapse; 
+    width: 80%; 
+    max-width: 800px; 
+}
+th, td { 
+    border: 1px solid #444; 
+    padding: 12px; 
+    text-align: left; 
+}
+th { 
+    background: #333; 
+    color: #ffcc00; 
+}
+tr:nth-child(even) { 
+    background: #222; 
+}
+.update-time { 
+    color: #888; 
+    font-size: 0.9em; 
+    margin-bottom: 20px; 
+}
+/* 合計行用のスタイル */
+.total-row {
+    background: #333 !important; 
+    font-weight: bold; 
+    color: #ffcc00;
+}
