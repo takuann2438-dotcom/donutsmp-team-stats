@@ -28,21 +28,32 @@ window.loadStats = async function() {
     try {
         const response = await fetch(`team_stats.json?t=${new Date().getTime()}`);
         const rootData = await response.json();
+        
         const tbody = document.querySelector('#statsTable tbody');
+        const timeElement = document.getElementById('time'); // メッセージ部分を取得
+        
         if (!tbody) return;
         tbody.innerHTML = '';
 
+        // 【修正】時刻データがなくても、とりあえず「読み込み中」は消す
+        if (rootData.lastUpdated) {
+            const lastUpdated = new Date(rootData.lastUpdated).toLocaleString();
+            timeElement.innerText = `データ最終取得時刻: ${lastUpdated}`;
+        } else {
+            timeElement.innerText = `データ取得完了（時刻不明）`;
+        }
+
         const players = rootData.players || [];
+        
+        // --- (ここから下の計算やループ処理は今のままでOKですが、念のため再掲) ---
         let totalMoney = 0, totalShards = 0, totalKills = 0, totalDeaths = 0;
 
-        // K/Dを計算してデータに持たせる
         players.forEach(p => {
             const k = parseInt(p.kills) || 0;
             const d = parseInt(p.deaths) || 0;
             p.kd = d === 0 ? k : parseFloat((k / d).toFixed(2));
         });
 
-        // ソート処理
         players.sort((a, b) => {
             let valA = a[currentSortKey] || 0;
             let valB = b[currentSortKey] || 0;
@@ -62,7 +73,6 @@ window.loadStats = async function() {
             totalDeaths += d;
 
             const row = document.createElement('tr');
-            // 【重要】<td> を6つ並べる！
             row.innerHTML = `
                 <td>${player.name || 'Unknown'}</td>
                 <td>${formatNumber(m)}</td>
@@ -74,11 +84,9 @@ window.loadStats = async function() {
             tbody.appendChild(row);
         });
 
-        // チーム合計の計算
         const totalKD = totalDeaths === 0 ? totalKills : (totalKills / totalDeaths).toFixed(2);
         const totalRow = document.createElement('tr');
         totalRow.className = 'total-row';
-        // 【重要】ここも <td> を6つ並べる！
         totalRow.innerHTML = `
             <td>TEAM TOTAL</td>
             <td>${formatNumber(totalMoney)}</td>
@@ -91,6 +99,8 @@ window.loadStats = async function() {
 
     } catch (e) {
         console.error("読み込み失敗:", e);
+        const timeElement = document.getElementById('time');
+        if (timeElement) timeElement.innerText = 'エラー：データの読み込みに失敗しました。';
     }
 };
 
