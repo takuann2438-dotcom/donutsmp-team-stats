@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-30T21:30:11.086Z",
+  "lastUpdated": "2026-04-30T22:32:07.306Z",
   "players": [
     {
       "name": "takanah_oisii",
@@ -29,16 +29,16 @@
     },
     {
       "name": "HatterSheep",
-      "money": "181223",
+      "money": "181813",
       "shards": "315",
       "kills": "0",
       "deaths": "1",
-      "playtime": "304881594",
-      "placed_blocks": "270",
-      "broken_blocks": "1727",
+      "playtime": "305157006",
+      "placed_blocks": "279",
+      "broken_blocks": "1730",
       "mobs_killed": "15",
       "money_spent_on_shop": "27385",
-      "money_made_from_sell": "55447.75"
+      "money_made_from_sell": "5.6037772959715265e+4"
     },
     {
       "name": "Neko_Gunsou",
