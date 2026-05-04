@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-04T11:19:19.114Z",
+  "lastUpdated": "2026-05-04T13:02:48.192Z",
   "players": [
     {
       "name": "takanah_oisii",
@@ -30,11 +30,11 @@
     {
       "name": "HatterSheep",
       "money": "1113649",
-      "shards": "1431",
+      "shards": "5",
       "kills": "0",
       "deaths": "1",
-      "playtime": "361515406",
-      "placed_blocks": "279",
+      "playtime": "363840879",
+      "placed_blocks": "281",
       "broken_blocks": "1730",
       "mobs_killed": "15",
       "money_spent_on_shop": "27385",
